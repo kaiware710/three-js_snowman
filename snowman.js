@@ -1,23 +1,29 @@
 window.addEventListener("DOMContentLoaded", init);
 
 function init() {
-  const width = 460;
-  const height = 250;
+  const width = 720;
+  const height = 500;
 
   // レンダラーを作製 //
   const renderer = new THREE.WebGLRenderer({
-    canvas: document.querySelector("#canvas"),
+    // canvas: document.querySelector("#canvas"),  // canvas要素に投影（divの方とどっちかで）
+    antialias: true, // メッシュの輪郭を滑らかに表示
   });
-  // スマホでも綺麗に見えるようにデバイスピクセル比を設定
-  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
+  renderer.setClearColor(0xe6e6fa); // 空間の背景色
+  // スマホでも綺麗に見えるようにデバイスピクセル比を設定、高解像度対応
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.getElementById("canvas").appendChild(renderer.domElement); //div要素にcanvasを追加
 
   // シーン：オブジェクトや光源などの置き場 //
   const scene = new THREE.Scene();
 
-  // カメラを作成。(画角, アスペクト比, 描画開始距離, 描画終了距離)
-  const camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
-  camera.position.set(0, 0, +1000);
+  // カメラを作成
+  // PerspectiveCamera:遠近感のあるカメラ
+  // (画角, アスペクト比: 投影するスクリーンの縦横比, 描画開始距離: カメラから手前, 描画終了距離:カメラから奥)
+  const camera = new THREE.PerspectiveCamera(90, width / height, 1, 1000);
+  camera.position.set(60, 50, 140);
+  camera.lookAt(scene.position);
 
   // 雪だるまを作製
   // Geometry
@@ -115,21 +121,23 @@ function init() {
 
   // ライトを作製 //
   // 平行光源(DirectionalLight)
-  const light = new THREE.DirectionalLight(0xffffff);
-  light.intensity = 2; // 光の強さ2倍
+  const light = new THREE.DirectionalLight(0xffffff, 0.9);
   // ライトの位置を変更(斜めから差し込むように)
-  light.position.set(1, 1, 1);
+  light.position.set(0, 50, 30);
   scene.add(light);
 
+  //環境光源(アンビエントライト)：すべてを均等に照らす、影のない、全体を明るくするライト
+  const ambient = new THREE.AmbientLight(0xf8f8ff, 0.9);
+  scene.add(ambient);
+
   // 初回実行
-  tick();
+  render();
 
-  function tick() {
-    requestAnimationFrame(tick);
+  function render() {
+    requestAnimationFrame(render);
 
-    // 立方体を回転させる
-    // box.rotation.x += 0.01;
-    // box.rotation.y += 0.01;
+    // 雪だるまを上から見て反時計回りに回転
+    snowman.rotation.y += 0.01;
 
     // レンダリング
     renderer.render(scene, camera);
