@@ -1,3 +1,9 @@
+# File
+.DS_Store
+/.vscode
+/three.js-master
+
+
 # Logs
 logs
 *.log
