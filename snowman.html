@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="js">
+<html lang="ja">
 
   <head>
     <meta charset="utf-8">
     <title>Snowman 3D ~ three.js</title>
+
+
   </head>
 
   <body>
@@ -14,7 +16,14 @@
     </style>
 
     <div id="stage"></div>
-    <script src="./three.min.js"></script>
+
+    <!-- three.min.js -->
+    <script src="./three.js-master/build/three.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script> -->
+    <!-- OrbitControls.js -->
+    <script src="./three.js-master/examples/js/controls/OrbitControls.js"></script>
+    <!-- <script src="https://codepen.io/kudo3/pen/abzbWYN.js"></script> -->
+
 
     <!-- three.js 記述 -->
     <script>
@@ -44,7 +53,7 @@
           new THREE.CylinderGeometry(25,25,40,30),
           hatMaterial
         );
-        hat.position.set(0,50,50);  // (x,y,z)
+        hat.position.set(0,50,0);  // (x,y,z)
 
         const hat_line = new THREE.Mesh(
           new THREE.CylinderGeometry(26,25,20,30),
@@ -123,12 +132,15 @@
         camera.position.set(60,50,140);
         camera.lookAt(scene.position);  // カメラの視点(注視点)
 
+        const controls = new THREE.OrbitControls(camera);
+
         // renderer
         const renderer = new THREE.WebGLRenderer({antialias:true});  // メッシュの輪郭を滑らかに表示
         renderer.setSize(width, height)
         renderer.setClearColor(0xe6e6fa)  // 空間の背景色
         renderer.setPixelRatio(window.devicePixelRatio);  // 高解像度対応
         document.getElementById('stage').appendChild(renderer.domElement);  // div要素にcanvasを追加
+
         function render(){
           requestAnimationFrame(render);  // 再度render関数を実行
           renderer.render(scene, camera);  // sceneとcameraを基に描画
