@@ -4,8 +4,12 @@
   <head>
     <meta charset="utf-8">
     <title>Snowman 3D ~ three.js</title>
-
-
+    <!-- ローカル -->
+    <script src="./three.js-master/build/three.min.js"></script>
+    <script src="./snowman.js"></script>
+    <script src="./three.js-master/examples/js/controls/OrbitControls.js"></script>
+    <!-- CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.min.js"></script>
   </head>
 
   <body>
@@ -15,141 +19,7 @@
       }
     </style>
 
-    <div id="stage"></div>
-
-    <!-- three.min.js -->
-    <script src="./three.js-master/build/three.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script> -->
-    <!-- OrbitControls.js -->
-    <script src="./three.js-master/examples/js/controls/OrbitControls.js"></script>
-    <!-- <script src="https://codepen.io/kudo3/pen/abzbWYN.js"></script> -->
-
-
-    <!-- three.js 記述 -->
-    <script>
-      (function(){
-        'use strict';
-
-        const width = 460;
-        const height = 250;
-
-        // scene
-        const scene = new THREE.Scene();  // 3Dを表現する空間
-
-        // mesh
-        // Box:直方体のジオメトリー (幅, 高さ, 奥行き)
-        const buttonGeometry = new THREE.BoxGeometry(5,5,5)
-
-        // MeshLamber:奥行きと影があり、光沢感のないマテリアル
-        const hatMaterial = new THREE.MeshLambertMaterial({color:0x333333})
-        const headMaterial = new THREE.MeshLambertMaterial({color:0xffffff})
-        const buttonMaterial = new THREE.MeshLambertMaterial({color:0x228b22})
-
-        // meshTool:3Dを2Dの手書き風にできるマテリアル
-        const eyeMaterial = new THREE.MeshToonMaterial({color:0x000000})
-
-        const hat = new THREE.Mesh(
-          // CylinderGeometry:円柱のジオメトリー (上面半径, 下面半径, 高さ, 円周分割数)
-          new THREE.CylinderGeometry(25,25,40,30),
-          hatMaterial
-        );
-        hat.position.set(0,50,0);  // (x,y,z)
-
-        const hat_line = new THREE.Mesh(
-          new THREE.CylinderGeometry(26,25,20,30),
-          new THREE.MeshLambertMaterial({color:0xe60033})
-        );
-        hat_line.position.set(0,35,0);
-
-        const hat_collar = new three.Mesh(
-          new THREE.CylinderGeometry(40,40,5,30),
-          hatMaterial
-        );
-        hat_collar.position.set(0,32,0);
-
-        const head = new THREE.Mesh(
-          // SphereGeometry:球のジオメトリー (半径, 緯度分割数, 経度分割数)
-          new THREE.SphereGeometry(40,40,20),
-          headMaterial
-        );
-        head.position.set(0,0,0);
-
-        const right_eye = new THREE.Mesh(
-            new THREE.SphereGeometry(5, 25, 40),
-            eyeMaterial
-        );
-        right_eye.position.set(15, 18, 30);
-
-        const left_eye = new THREE.Mesh(
-            new THREE.SphereGeometry(5, 10, 40),
-            eyeMaterial
-        );
-        left_eye.position.set(-16, 18, 33);
-
-        const nose = new THREE.Mesh(
-          new THREE.SphereGeometry(5,30,20),
-          new THREE.MeshLambertMaterial({color:0xed9121})
-        );
-        nose.position.set(3,10,35);
-
-        const body = new THREE.Mesh(
-            new THREE.SphereGeometry(50, 50, 50),
-            headMaterial
-        );
-        body.position.set(0, -60, 0);
-
-        const button_first = new THREE.Mesh(
-            buttonGeometry,
-            buttonMaterial
-        );
-        button_first.position.set(0, -30, 37);
-
-        const button_second = new THREE.Mesh(
-            buttonGeometry,
-            buttonMaterial
-        );
-        button_second.position.set(0, -40, 43);
-
-        // メッシュをフループ化
-        const snowman = new THREE.Group();
-        snowman.add(hat, hat_line, hat_collar, head, right_eye, left_eye, nose, button_first, button_second);
-        scene.add(snowman);
-
-        // light
-        // DirectionalLight(平行光源):一方向から同じ強さで平行に照らす (色, 光の強さ)
-        const light = new THREE.DirectionalLight(0xffffff, 0.9);
-        light.position.set(0, 50, 30);
-        scene.add(light)
-
-        // AmbientLight(環境光源):全てを均等に照らす、影の無い、全体を明るくするライト
-        const ambient = new THREE.AmbientLight(0xf8f8ff, 0.9);
-        scene.add(ambient);
-
-        // camera
-        // PerspectiveCamera:遠近感のあるカメラ
-        // (視野角, 上映するスクリーンの縦横比, カメラから手前までの距離, カメラから奥までの距離)
-        const camera = new THREE.PerspectiveCamera(90, width/height, 1, 1000);
-        camera.position.set(60,50,140);
-        camera.lookAt(scene.position);  // カメラの視点(注視点)
-
-        const controls = new THREE.OrbitControls(camera);
-
-        // renderer
-        const renderer = new THREE.WebGLRenderer({antialias:true});  // メッシュの輪郭を滑らかに表示
-        renderer.setSize(width, height)
-        renderer.setClearColor(0xe6e6fa)  // 空間の背景色
-        renderer.setPixelRatio(window.devicePixelRatio);  // 高解像度対応
-        document.getElementById('stage').appendChild(renderer.domElement);  // div要素にcanvasを追加
-
-        function render(){
-          requestAnimationFrame(render);  // 再度render関数を実行
-          renderer.render(scene, camera);  // sceneとcameraを基に描画
-          snowman.rotation.y += 0.01;  // 反時計回りに回転
-        }
-        render();
-
-      })();
-    </script>
+    <canvas id="canvas"></canvas>
 
   </body>
 </html>
